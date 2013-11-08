@@ -44,7 +44,7 @@ describe "Authentication" do
          end
       end
 
-   end
+   end #signin
 
    describe "authorization" do
 
@@ -83,8 +83,23 @@ describe "Authentication" do
                before { visit users_path }
                it { should have_title('Sign in') }
             end
-         end
-      end
+         end #Users controller
+
+         describe "in the Microposts controller" do
+
+            describe "submitting to the create action" do
+               before { post microposts_path }
+               specify { expect(response).to redirect_to(signin_path) }
+            end
+
+            describe "submitting to the destroy action" do
+               before { delete micropost_path(FactoryGirl.create(:micropost)) }
+               specify { expect(response).to redirect_to(signin_path) }
+            end
+
+         end #Microposts controller
+
+      end #non signed in users
 
       describe "as wrong user" do
          let(:user) { FactoryGirl.create(:user) }
@@ -115,6 +130,6 @@ describe "Authentication" do
          end
       end
 
-   end
+   end #authorization
 
 end
